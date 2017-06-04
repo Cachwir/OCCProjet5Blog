@@ -160,6 +160,41 @@ class Form {
 		}
 	}
 
+    /**
+     * Returns a XSS protected message bound in the $element
+     * @param string        $type             error, warning or success
+     * @param string|null   $target           the target. If null, will get all the untargeted messages and add a <br> between them
+     * @param string        $element          The html element in which the message should be put. Use %message% to specify the message. Ex : "<span>%message%</span>"
+     * @return mixed|string
+     */
+	public function printMessageIfExists($target = null, $type = "error", $element = "%message%")
+    {
+        $message = "";
+
+	    if ($target !== null && isset($this->messages[$type][$target])) {
+            $message = $this->messages[$type][$target];
+        } elseif ($target === null && !empty($this->messages[$type])) {
+            for ($i = 0, $c = count($this->messages[$type]); $i < $c; $i++) {
+                if (isset($this->messages[$type][$i])) {
+                    if ($message !== "") {
+                        $message .= "<br>";
+                    }
+                    $message .= htmlspecialchars($this->messages[$type][$i]);
+                }
+            }
+        }
+
+        if ($message !== "") {
+            $message = str_replace("%message%", $message, $element);
+        }
+
+        return $message;
+    }
+
+    public function hasMessages() {
+        return count($this->messages['error']) > 0 || count($this->messages['warning']) > 0 || count($this->messages['success']) > 0;
+    }
+
 	public function hasErrors() {
 		return count($this->messages['error']) > 0;
 	}
@@ -181,6 +216,9 @@ class Form {
 	}
 
 	public function open($class = null, $additionnal_attr = []) {
+
+        $this->setAttr('method', "post");
+
 		if ($class !== null) {
 			$this->setAttr('class', $this->getAttr('class').' '.$class);
 		}
