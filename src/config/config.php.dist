@@ -1,0 +1,33 @@
+<?php
+
+Config::set([
+	'debug'                  => true,
+	'debug_key'              => 'cachwir',
+	'default_lang'           => 'fr',
+	'session_namespace'      => '_app_occ_blog',
+	'session_add_id_in_urls' => false,
+
+	'database'              => [
+		'database' => '',
+		'hostname' => '',
+		'username' => '',
+		'password' => '',
+	],
+
+	'template_dir'      => __DIR__.'/../templates/',
+]);
+
+Config::set([
+	'site_title' => 'Mon super blog',
+	'mailing'               => [
+		'perform_shoot' => false,
+		'confirmation_callback'  => [
+			"host" => "",
+			"port" => 587,
+			"username" => "",
+			"password" => "",
+			"from" => "",
+			"to" => "",
+		],
+	],
+], 'fr');
