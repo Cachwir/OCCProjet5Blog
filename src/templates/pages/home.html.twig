@@ -103,18 +103,18 @@
                 <div class="col-sm-6 footer-left">
                     <h3>Me contacter</h3>
                     <div class="contact-form">
-                        {{ ContactForm.open("", {action: "/#footer", id: "contact-form"}) }}
+                        {{ ContactForm.open("", {id: "contact-form"}) }}
                         <div class="form-group">
                             <label class="sr-only" for="contact-name">Nom et prénom</label>
-                            <input type="text" name="name" placeholder="Votre nom et prénom" class="contact-name form-control" id="contact-name">
+                            <input type="text" name="name" value="{{ ContactForm.get("name") }}" placeholder="Votre nom et prénom" class="contact-name form-control" id="contact-name">
                         </div>
                         <div class="form-group">
                             <label class="sr-only" for="contact-email">Email</label>
-                            <input type="text" name="email" placeholder="Votre adresse email" class="contact-email form-control" id="contact-email">
+                            <input type="email" name="email" value="{{ ContactForm.get("email") }}" placeholder="Votre adresse email" class="contact-email form-control" id="contact-email">
                         </div>
                         <div class="form-group">
                             <label class="sr-only" for="contact-message">Message</label>
-                            <textarea name="message" placeholder="Votre message" class="contact-message form-control" id="contact-message"></textarea>
+                            <textarea name="message" placeholder="Votre message" class="contact-message form-control" id="contact-message">{{ ContactForm.get("message") }}</textarea>
                         </div>
                         <button type="submit" class="btn">Envoyer</button>
                         {{ ContactForm.close() }}
@@ -147,8 +147,12 @@
 
     <script>
         $(function() {
+            var hasSubmittedContactForm = {{ ContactForm.hasMessages() ? "true" : "false" }};
             $(document).ready(function(e) {
                 handle_pop_below($('#contact-form'));
+                if (hasSubmittedContactForm) {
+                    $('[href="#footer"]').click();
+                }
             });
         })
     </script>

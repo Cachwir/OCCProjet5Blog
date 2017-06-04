@@ -191,6 +191,10 @@ class Form {
         return $message;
     }
 
+    public function hasMessages() {
+        return count($this->messages['error']) > 0 || count($this->messages['warning']) > 0 || count($this->messages['success']) > 0;
+    }
+
 	public function hasErrors() {
 		return count($this->messages['error']) > 0;
 	}
