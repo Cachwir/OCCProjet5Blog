@@ -29,7 +29,7 @@ jQuery(document).ready(function() {
     /*
         Background slideshow
     */
-    $('.top-content').backstretch("assets/img/backgrounds/1.jpg");
+    $('.top-content').backstretch("assets/maren-one-page-template/assets/img/backgrounds/1.jpg");
     $('.call-to-action-container').backstretch("assets/img/backgrounds/1.jpg");
     $('.testimonials-container').backstretch("assets/img/backgrounds/1.jpg");
     
@@ -44,41 +44,14 @@ jQuery(document).ready(function() {
         Wow
     */
     new WOW().init();
-    
+
     /*
 	    Contact form
 	*/
 	$('.contact-form form input[type="text"], .contact-form form textarea').on('focus', function() {
-		$('.contact-form form input[type="text"], .contact-form form textarea').removeClass('input-error');
+		$(this).closest(".form-group").find(".input-error").removeClass('input-error');
 	});
-	$('.contact-form form').submit(function(e) {
-		e.preventDefault();
-	    $('.contact-form form input[type="text"], .contact-form form textarea').removeClass('input-error');
-	    var postdata = $('.contact-form form').serialize();
-	    $.ajax({
-	        type: 'POST',
-	        url: 'assets/contact.php',
-	        data: postdata,
-	        dataType: 'json',
-	        success: function(json) {
-	            if(json.emailMessage != '') {
-	                $('.contact-form form .contact-email').addClass('input-error');
-	            }
-	            if(json.subjectMessage != '') {
-	                $('.contact-form form .contact-subject').addClass('input-error');
-	            }
-	            if(json.messageMessage != '') {
-	                $('.contact-form form textarea').addClass('input-error');
-	            }
-	            if(json.emailMessage == '' && json.subjectMessage == '' && json.messageMessage == '') {
-	                $('.contact-form form').fadeOut('fast', function() {
-	                    $('.contact-form').append('<p>Thanks for contacting us! We will get back to you very soon.</p>');
-	                });
-	            }
-	        }
-	    });
-	});
-	
+
 });
 
 

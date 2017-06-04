@@ -1,0 +1,19 @@
+/* HOME PAGE */
+
+.top-content .text .logo a {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    background: none;
+}
+
+.top-content .text .logo a img {
+    max-width: 160px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+span.input-error {
+    color: #ff8a38;
+}
