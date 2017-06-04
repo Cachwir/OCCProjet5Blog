@@ -37,3 +37,36 @@
 </head>
 
 <body class="<?php echo $App->getCurrentPage(); ?>">
+
+<!-- Loader -->
+<div class="loader">
+    <div class="loader-img"></div>
+</div>
+
+<!-- Top menu -->
+<nav class="navbar navbar-inverse navbar-fixed-top navbar-no-bg" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="top-navbar-1">
+            <ul class="nav navbar-nav">
+                <li><a class="scroll-link" href="/?page=home">Accueil</a></li>
+<!--                <li><a class="scroll-link" href="/?page=blog">Blog</a></li>-->
+            </ul>
+            <div class="navbar-text navbar-right">
+                <a href="https://github.com/Cachwir" target="_blank" title="Github"><i class="fa fa-github"></i></a>
+                <a href="https://twitter.com/Cachwir" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+                <a href="https://www.linkedin.com/in/antoine-bernay-0a4138143/" target="_blank" title="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                <a href="pdf/cv.pdf" target="_blank" title="CV"><i class="fa fa-file-pdf-o"></i></a>
+                <a href="mailto:a.bernay@protonmail.com" target="_blank" title="E-mail"><i class="fa fa-envelope-o"></i></a>
+            </div>
+        </div>
+    </div>
+</nav>
