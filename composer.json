@@ -1,0 +1,13 @@
+{
+    "name": "root/occ-projet5blog",
+    "authors": [
+        {
+            "name": "cachwir",
+            "email": "cachwir@gmx.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "^2.0",
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}
