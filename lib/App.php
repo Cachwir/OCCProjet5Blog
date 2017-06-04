@@ -27,6 +27,8 @@ class App {
     protected $userAgent;
     protected $is_ajax;
 
+    protected $Twig;
+
 	public function __construct() {
 		ensure_session_started();
 	}
@@ -57,6 +59,15 @@ class App {
             $page = $this->params['page'];
         }
 
+        $App = $this; // for accessing $app in the header and footer templates
+
+        $Loader = new Twig_Loader_Filesystem(Config::getTemplateDir($this->getLang()));
+        $this->Twig = new Twig_Environment($Loader, array(
+            'debug' => $this->getConfig()['debug'],
+            'cache' => __DIR__ . '/../../var/cache',
+        ));
+        $this->Twig->addGlobal("App", $App);
+
         try {
             $content = $this->forward($this->getNextPage($page, $this->is_ajax));
         } catch (\Exception $e) {
@@ -76,14 +87,12 @@ class App {
             // Fix IE compatibility (http://stackoverflow.com/questions/3449286/force-ie-compatibility-mode-off-using-tags)
             header('X-UA-Compatible: IE=edge');
 
-            $App = $this; // for accessing $app in the header and footer templates
-
             if (in_array($this->getCurrentPage(), static::$fullPages)) {
                 echo $content;
             } else {
-                include Config::getTemplateDir($this->getLang()).'/header.php';
+                echo $this->Twig->render('header.html.twig');
                 echo $content;
-                include Config::getTemplateDir($this->getLang()).'/footer.php';
+                echo $this->Twig->render('footer.html.twig');
             }
         }
     }
@@ -113,13 +122,12 @@ class App {
 		}
 
 		// set template variables
-		$App = $this;
 		foreach ($params as $name => $value) {
 			$$name = $value;
 		}
 
 		ob_start();
-		include Config::getTemplateDir($this->getLang()).'/pages/'.$template.'.php';
+        echo $this->Twig->render('pages/'.$template.'.html.twig', $params);
 		return ob_get_clean();
 	}
 

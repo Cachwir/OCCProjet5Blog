@@ -1,9 +1,14 @@
+var errorHandler = "popBelow";
 
 function process_form($form, transition, preprocessData, postRenderTemplate) {
 
 	postRenderTemplate = postRenderTemplate || $.noop;
 
-	handle_qtips($form);
+	if (errorHandler === "qtip") {
+        handle_qtips($form);
+	} else if (errorHandler === "popBelow") {
+        handle_pop_below($form);
+	}
 
 	$form.on('submit', function(evt, moreData){
 		evt.preventDefault();
@@ -36,7 +41,7 @@ function handle_qtips($form) {
 
 		var $el = $('#'+$message.attr('for'), $form);
 		if(!$el.length) {
-			$el = $('input[name="'+$message.attr('for')+'"], select[name="'+$message.attr('for')+'"]', $form).first();
+			$el = $('input[name="'+$message.attr('for')+'"], textarea[name="'+$message.attr('for')+'"], select[name="'+$message.attr('for')+'"]', $form).first();
 		}
 		if(!$el.length) {
 			$el = null
@@ -94,6 +99,49 @@ function handle_qtips($form) {
 		}
 
 	});
+}
+
+function handle_pop_below($form)
+{
+    $('label.error, label.success', $form).each(function(){
+        var $message = $(this);
+        var type = $message.hasClass('error') ? 'error' : 'success';
+        var $messageElement;
+
+        var $el = $('#'+$message.attr('for'), $form);
+        if(!$el.length) {
+            $el = $('input[name="'+$message.attr('for')+'"], textarea[name="'+$message.attr('for')+'"], select[name="'+$message.attr('for')+'"]', $form).first();
+        }
+        if(!$el.length) {
+            $el = null
+        }
+
+        if(!$el || ($el.attr('type') == 'hidden' && !$w)) {
+            if (type === "success") {
+                $messageElement = $('<p class="input-success"></p>');
+            } else {
+                $messageElement = $('<p class="input-error help-inline"></p>');
+			}
+
+            $messageElement.text($message.text());
+            $form.prepend($messageElement);
+
+            $message.detach();
+        } else {
+			$messageElement = $('<span class="input-'+ type +' help-inline"></span>');
+            $messageElement.text($message.text());
+
+			$el.after($messageElement);
+
+            $message.detach();
+
+            $el.focus(function(e) {
+                $messageElement.fadeOut(500, function(e) {
+                	$(this).remove();
+				});
+			});
+        }
+    });
 }
 
 function ajax_load_content(url, transition, postRenderTemplate, data, method) {

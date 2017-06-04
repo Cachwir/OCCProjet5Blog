@@ -24,6 +24,7 @@ Config::set([
 		'confirmation_callback'  => [
 			"host" => "",
 			"port" => 587,
+			"encryption" => "",
 			"username" => "",
 			"password" => "",
 			"from" => "",

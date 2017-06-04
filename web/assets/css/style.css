@@ -14,6 +14,9 @@
     border-radius: 50%;
 }
 
-span.input-error {
+.input-success {
+    color: #4aff4b;
+}
+.input-error {
     color: #ff8a38;
 }
