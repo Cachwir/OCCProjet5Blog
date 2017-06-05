@@ -95,7 +95,6 @@ class Form {
 		}
 
 		foreach ($this->fields as $field => $type) {
-//			$this->set($field, isset($params[$field]) ? cast($params[$field], $type) : ($type == 'b' ? false : null));
 			$this->set($field, isset($params[$field]) ? cast($params[$field], $type) : null);
 		}
 

@@ -10,7 +10,7 @@
  *
  * If you have any doubt, you can look at the existing entities and compare it to the entity you wish to create.
  */
-abstract class ORM {
+abstract class ORM implements \ArrayAccess {
 
 	public static $tableName = "";
 	
@@ -192,6 +192,19 @@ abstract class ORM {
 	public function hashField($mail_field) {
 		$this->set($mail_field, sha1($this->get($mail_field)));
 	}
+
+    public function offsetExists ($offset) {
+	    return array_key_exists($offset, static::$fields);
+    }
+    public function offsetGet ($offset) {
+	    return $this->get($offset);
+    }
+    public function offsetSet ($offset ,$value) {
+	    return $this->set($offset, $value);
+    }
+    public function offsetUnset ($offset) {
+	    return $this->set($offset, null);
+    }
 }
 
 

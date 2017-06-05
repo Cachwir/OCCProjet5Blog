@@ -4,6 +4,9 @@ class AppController extends App {
 
 	public static $pages = [
 		'home',
+        'blog',
+        'blogPost',
+        'manageBlogPost'
 	];
 
 	public function homeAction() {
@@ -72,4 +75,78 @@ class AppController extends App {
 
 		return $this->render('home', $template_params);
 	}
+
+    public function blogAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $template_params["BlogPosts"] = BlogPost::findFromLast();
+
+        return $this->render('blog', $template_params);
+    }
+
+    public function blogPostAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $id = $this->paramGet("id");
+        $BlogPost = BlogPost::findById($id);
+
+        if (!$BlogPost instanceof BlogPost) {
+            $this->redirectToPage("blog");
+        }
+
+        $template_params["BlogPost"] = $BlogPost;
+
+        return $this->render('blogPost', $template_params);
+    }
+
+    public function manageBlogPostAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $id = $this->paramGet("id");
+
+        if ($id !== null) {
+            $BlogPost = BlogPost::findById($id);
+            if (!$BlogPost instanceof BlogPost) {
+                $this->redirectToPage("blog");
+            }
+            $mode = "edit";
+            $template_params["title"] = "Editer un post";
+        } else {
+            $BlogPost = new BlogPost();
+            $BlogPost->set("publication_date", time());
+            $mode = "new";
+            $template_params["title"] = "Nouveau post";
+        }
+
+        $template_params["BlogPost"] = $BlogPost;
+
+        return $this->formStepAction($BlogPost, 'manageBlogPost', 'manageBlogPost', [], [
+            ['author', 's', function ($v) {
+                if (empty($v)) return "Ce champ est requis";
+                if (strlen($v) > 255) return "Ce champ ne peut contenir plus de 255 caractères";
+            }],
+            ['title', 's', function ($v) {
+                if (empty($v)) return "Ce champ est requis";
+                if (strlen($v) > 255) return "Ce champ ne peut contenir plus de 255 caractères";
+            }],
+            ['introduction', 's', function ($v) {
+                if (empty($v)) return "Ce champ est requis";
+            }],
+            ['content', 's', function ($v) {
+                if (empty($v)) return "Ce champ est requis";
+            }],
+        ], $template_params, null, function($Form, &$next_params) use ($BlogPost, $mode) {
+            if ($mode == "edit") {
+                $BlogPost->set("last_modification_date", time());
+                $BlogPost->save();
+            }
+            $next_params["id"] = $BlogPost->get("id");
+        });
+    }
 }

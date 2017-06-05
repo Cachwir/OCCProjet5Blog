@@ -1,13 +1,19 @@
+/* GLOBAL */
+
+#content {
+    min-height: 100vh;
+}
+
 /* HOME PAGE */
 
-.top-content .text .logo a {
+.home .top-content .text .logo a {
     display: inline-block;
     width: auto;
     height: auto;
     background: none;
 }
 
-.top-content .text .logo a img {
+.home .top-content .text .logo a img {
     max-width: 160px;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
@@ -56,3 +62,51 @@ input[type="email"]:focus {
 input[type="email"]:-moz-placeholder { color: #ddd; }
 input[type="email"]:-ms-input-placeholder { color: #ddd; }
 input[type="email"]::-webkit-input-placeholder { color: #ddd; }
+
+/* BLOG */
+
+.top-container {
+    height: 440px;
+    background: url(../maren-one-page-template/assets/img/backgrounds/1.jpg);
+    background-size: cover;
+    padding-top: 63px;
+}
+
+.blog-container {
+    min-height: calc(100vh - 621px);
+    padding: 3vh 0;
+}
+.blog-container.no-blog-post {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.blog-container.no-blog-post .blog-box {
+    text-align: center;
+    margin: 0;
+}
+
+/* BLOG POST */
+
+.blogPost .blog-container {
+    padding-bottom: calc(3vh + 30px);
+}
+.bold {
+    font-weight: bold;
+}
+
+/* MANAGE BLOG POST */
+
+.manageBlogPost .footer-container {
+    min-height: calc(100vh - 621px);
+    padding: 5vh 0 0 0;
+}
+
+.manageBlogPost .contact-form textarea {
+    height: auto;
+}
+
+.left-padding {
+    display: inline-block;
+
+}

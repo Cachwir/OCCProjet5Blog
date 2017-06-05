@@ -1,0 +1,63 @@
+<div id="content">
+    <div class="top-container section-container section-container-image-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 blog section-description wow fadeIn">
+                    <h2>Blog</h2>
+                    <div class="divider-1 wow fadeInUp"><span></span></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 section-bottom-button wow fadeInUp">
+                    <a class="btn btn-link-1" href="?page=manageBlogPost">Ajouter un post</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Blog -->
+    <div class="blog-container section-container {{ BlogPosts is empty ? "no-blog-post" : "" }}">
+        <div class="container">
+            <div class="row">
+                {% for BlogPost in BlogPosts %}
+                    <div class="col-sm-6 blog-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3><a href="?page=blogPost&id={{ BlogPost.id }}">{{ BlogPost.title|length > 100 ? BlogPost.title|slice(0, 100) ~ '...' : BlogPost.title }}</a> <i class="fa fa-angle-right"></i></h3>
+                                <div class="blog-box-date"><i class="fa fa-calendar-o"></i> Publié le {{ BlogPost.publicationDate|date("d/m/Y") }}</div>
+                                <p>{{ BlogPost.introduction|length > 300 ? BlogPost.introduction|slice(0, 300) ~ '...' : BlogPost.introduction }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-sm-12 blog-box wow fadeInLeft">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h3><a href="?page=manageBlogPost">Aucun post n'a encore été publié</a> <i class="fa fa-angle-right"></i></h3>
+                                <p>Cliquez sur "Ajouter un post" pour publier votre premier post.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 footer-bottom">
+                    <a class="scroll-link" href="#top"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        $(function() {
+            $(document).ready(function(e) {
+            });
+        })
+    </script>
+</div>

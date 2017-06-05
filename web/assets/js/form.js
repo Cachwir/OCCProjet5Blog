@@ -108,10 +108,8 @@ function handle_pop_below($form)
         var type = $message.hasClass('error') ? 'error' : 'success';
         var $messageElement;
 
-        var $el = $('#'+$message.attr('for'), $form);
-        if(!$el.length) {
-            $el = $('input[name="'+$message.attr('for')+'"], textarea[name="'+$message.attr('for')+'"], select[name="'+$message.attr('for')+'"]', $form).first();
-        }
+        var $el = $('[name="'+$message.attr('for')+'"]', $form).first();
+
         if(!$el.length) {
             $el = null
         }

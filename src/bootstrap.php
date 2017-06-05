@@ -14,8 +14,8 @@ require_once __DIR__.'/../lib/Mobile_Detect.php';
 require_once __DIR__.'/../lib/BotDetect.php';
 require_once __DIR__.'/../lib/Inflector.php';
 require_once __DIR__.'/../vendor/autoload.php';
-require_once __DIR__ . '/app/AppController.php';
+require_once __DIR__.'/app/AppController.php';
 require_once __DIR__.'/data/BlogPost.php';
-require_once __DIR__ . '/utilitaries/Time.php';
+require_once __DIR__.'/utilitaries/Time.php';
 
 ensure_session_started();
