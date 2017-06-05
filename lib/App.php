@@ -140,7 +140,7 @@ class App {
 		exit();
 	}
 
-	public function redirectToPage($action, $params) {
+	public function redirectToPage($action, $params = []) {
 		$params['page'] = $action;
 		$target = '?' . http_build_query($params);
 		header('location: ' . $target);
@@ -158,6 +158,10 @@ class App {
 
 		return call_user_func([$this, $method], $params);
 	}
+
+	public function paramGet($field, $default = null) {
+	    return isset($this->params[$field]) ? $this->params[$field] : $default;
+    }
 
 	public function sessionGet($field, $default = null) {
 		$ns = $this->getConfig()['session_namespace'];

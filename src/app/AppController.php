@@ -4,6 +4,9 @@ class AppController extends App {
 
 	public static $pages = [
 		'home',
+        'blog',
+        'blogPost',
+        'manageBlogPost'
 	];
 
 	public function homeAction() {
@@ -72,4 +75,54 @@ class AppController extends App {
 
 		return $this->render('home', $template_params);
 	}
+
+    public function blogAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $template_params["BlogPosts"] = BlogPost::findFromLast();
+
+        return $this->render('blog', $template_params);
+    }
+
+    public function blogPostAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $id = $this->paramGet("id");
+        $BlogPost = BlogPost::findById($id);
+
+        if (!$BlogPost instanceof BlogPost) {
+            $this->redirectToPage("blog");
+        }
+
+        $template_params["BlogPost"] = $BlogPost;
+
+        return $this->render('blogPost', $template_params);
+    }
+
+    public function manageBlogPostAction() {
+
+        $params = $this->params;
+        $template_params = [];
+
+        $id = $this->paramGet("id");
+
+        if ($id !== null) {
+            $BlogPost = BlogPost::findById($id);
+
+            if (!$BlogPost instanceof BlogPost) {
+                $this->redirectToPage("blog");
+            }
+        } else {
+            $BlogPost = new BlogPost();
+        }
+
+
+        $template_params["BlogPost"] = $BlogPost;
+
+        return $this->render('manageBlogPost', $template_params);
+    }
 }
