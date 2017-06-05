@@ -1,0 +1,47 @@
+<div id="content">
+    <div class="top-container section-container section-container-image-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 blog section-description wow fadeIn">
+                    <h2>{{ BlogPost.title|nl2br }}</h2>
+                    <div class="divider-1 wow fadeInUp"><span></span></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 section-bottom-button wow fadeInUp">
+                    <a class="btn btn-link-1" href="?page=manageBlogPost&id={{ BlogPost.id }}">Editer ce post</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Blog -->
+    <div class="blog-container section-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 blog-box wow fadeInLeft">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="blog-box-date"><i class="fa fa-user"></i> Auteur : {{ BlogPost.author }}</div>
+                            <div class="blog-box-date"><i class="fa fa-calendar-o"></i> Publié le {{ BlogPost.publicationDate|date("d/m/Y") }}</div>
+                            <div class="blog-box-date"><i class="fa fa-calendar-o"></i> Dernière édition le {{ BlogPost.lastPublicationDate|date("d/m/Y") }}</div>
+                            <p class="bold">{{ BlogPost.introduction|nl2br  }}</p>
+                            <p>{{ BlogPost.content|nl2br  }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 footer-bottom">
+                    <a class="scroll-link" href="#blog-container"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
