@@ -1,0 +1,64 @@
+<div id="content">
+    <div class="top-container section-container section-container-image-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 blog section-description wow fadeIn">
+                    <h2>{{ title }}</h2>
+                    <div class="divider-1 wow fadeInUp"><span></span></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 section-bottom-button wow fadeInUp">
+                    <a class="btn btn-link-1" href="?page=blog">Revenir à la liste des posts</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer-container" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="contact-form">
+                        {{ Form.open() }}
+                            <div class="form-group">
+                                <label for="post-author">Auteur</label>
+                                <input type="text" name="author" value="{{ Form.get("author") }}" placeholder="Nom/Prénom ou Pseudonyme" class="form-control" id="post-author">
+                            </div>
+                            <div class="form-group">
+                                <label for="post-title">Titre</label>
+                                <input type="text" name="title" value="{{ Form.get("title") }}" placeholder="Un truc qui détonne" class="form-control" id="post-title">
+                            </div>
+                            <div class="form-group">
+                                <label for="post-introduction">Chapô/Introduction</label>
+                                <textarea name="introduction" placeholder="Un paragraphe pas trop imposant" class="form-control" id="post-introduction" rows="3">{{ Form.get("introduction") }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="post-content">Contenu</label>
+                                <textarea name="content" placeholder="Lâchez-vous" class="form-control" id="post-content" rows="8">{{ Form.get("content") }}</textarea>
+                            </div>
+                            <button type="submit" class="btn">Envoyer la sauce</button>
+                        {{ Form.close() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12 footer-bottom">
+                    <a class="scroll-link" href="#top"><i class="fa fa-chevron-up"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        $(function() {
+            $(document).ready(function(e) {
+                handle_pop_below($('.manageBlogPost'));
+            });
+        })
+    </script>
+</div>

@@ -22,7 +22,7 @@ class Config {
 	public static function getDefaultConfig($lang) {
 		return (isset(self::$config['default']) ? self::$config['default'] : []) + [
 			'debug'                 => false,
-			'ajaxController'        => 'index.php',
+			'ajaxController'        => '',
 			'default_lang'          => 'fr',
 
 			'csrf_token_validity'   => 6,

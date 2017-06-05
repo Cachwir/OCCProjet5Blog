@@ -273,7 +273,7 @@ class App {
                 $Entity->save();
 
                 if (is_callable($on_post_success)) {
-                    $on_post_success();
+                    $on_post_success($Form, $next_params);
                 }
 
                 if (!$this->is_ajax) {
