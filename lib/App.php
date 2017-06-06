@@ -64,7 +64,7 @@ class App {
         $Loader = new Twig_Loader_Filesystem(Config::getTemplateDir($this->getLang()));
         $this->Twig = new Twig_Environment($Loader, array(
             'debug' => $this->getConfig()['debug'],
-            'cache' => __DIR__ . '/../../var/cache',
+            'cache' => __DIR__ . '/../var/cache',
         ));
         $this->Twig->addGlobal("App", $App);
 
