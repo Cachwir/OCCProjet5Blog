@@ -74,7 +74,7 @@ input[type="email"]::-webkit-input-placeholder { color: #ddd; }
 
 .blog-container {
     min-height: calc(100vh - 621px);
-    padding: 3vh 0;
+    padding: 45px 0;
 }
 .blog-container.no-blog-post {
     display: flex;
@@ -84,6 +84,10 @@ input[type="email"]::-webkit-input-placeholder { color: #ddd; }
 .blog-container.no-blog-post .blog-box {
     text-align: center;
     margin: 0;
+}
+.blog-box {
+    margin-top: 0;
+    margin-bottom: 30px;
 }
 
 /* BLOG POST */
