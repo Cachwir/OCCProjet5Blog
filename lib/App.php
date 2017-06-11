@@ -4,6 +4,11 @@
  * Contributor: Cachwir <cachwir@gmail.com>
  */
 
+namespace lib;
+
+use Twig_Environment;
+use Twig_Loader_Filesystem;
+
 class App {
 
 	public static $pages = []; // pages that can be freely accessed with ?page=
@@ -153,7 +158,7 @@ class App {
 
 		$method = camelize($action)."Action";
 		if (!method_exists($this, $method)) {
-			throw new Exception("Action inconnue: $method");
+			throw new \Exception("Action inconnue: $method");
 		}
 
 		return call_user_func([$this, $method], $params);

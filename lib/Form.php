@@ -5,6 +5,8 @@
  * Time: 2:46 PM
  */
 
+namespace lib;
+
 class Form {
 
 	protected $data;

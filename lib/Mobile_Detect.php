@@ -25,6 +25,8 @@
  * @version     2.8.12
  */
 
+namespace lib;
+
 class Mobile_Detect
 {
     /**

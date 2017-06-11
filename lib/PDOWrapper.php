@@ -1,6 +1,8 @@
 <?php
 
-class PDOWrapper extends PDO
+namespace lib;
+
+class PDOWrapper extends \PDO
 {
 
 	protected static $pdo;
@@ -12,9 +14,9 @@ class PDOWrapper extends PDO
 			try {
 
 				self::$pdo = new PDOWrapper('mysql:host='.$config['database']['hostname'].';dbname='.$config['database']['database'], $config['database']['username'], $config['database']['password'], [
-					PDO::MYSQL_ATTR_INIT_COMMAND => "set names 'utf8'",
+					\PDO::MYSQL_ATTR_INIT_COMMAND => "set names 'utf8'",
 				]);
-				self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				self::$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 
 			} catch (\Exception $e) {
@@ -50,13 +52,13 @@ class PDOWrapper extends PDO
 		return $stmt;
 	}
 
-	public function fetch($sql, $params = [], $fetch_mode = PDO::FETCH_ASSOC) {
+	public function fetch($sql, $params = [], $fetch_mode = \PDO::FETCH_ASSOC) {
 		try {
 
 			$stmt = $this->bindParams($sql, $params);
 			$stmt->execute();
 
-			if ($fetch_mode == PDO::FETCH_COLUMN) {
+			if ($fetch_mode == \PDO::FETCH_COLUMN) {
 				return $stmt->fetchColumn();
 			} else {
 				return $stmt->fetch($fetch_mode);
@@ -66,14 +68,14 @@ class PDOWrapper extends PDO
 		}
 	}
 
-	public function fetchAll($sql, $params = [], $fetch_mode = PDO::FETCH_ASSOC) {
+	public function fetchAll($sql, $params = [], $fetch_mode = \PDO::FETCH_ASSOC) {
 		try {
 
 			$stmt = $this->bindParams($sql, $params);
 			$stmt->execute();
 
 			$rows = [];
-			if ($fetch_mode == PDO::FETCH_COLUMN) {
+			if ($fetch_mode == \PDO::FETCH_COLUMN) {
 				while ($row = $stmt->fetchColumn()) {
 					$rows[] = $row;
 				}

@@ -1,5 +1,13 @@
 <?php
 
+namespace src\app;
+
+use lib\App;
+use src\data\BlogPost;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
+
 class AppController extends App {
 
 	public static $pages = [
@@ -46,21 +54,21 @@ class AppController extends App {
 
                 $subject = "Site d'Antoine Bernay : un message à votre attention";
 
-                $transport = new Swift_SmtpTransport($mailer_config['host'], $mailer_config['port'], $mailer_config['encryption']);
-                $transport->setUsername($mailer_config['username'])
+                $Transport = new Swift_SmtpTransport($mailer_config['host'], $mailer_config['port'], $mailer_config['encryption']);
+                $Transport->setUsername($mailer_config['username'])
                     ->setSourceIp('0.0.0.0')
                     ->setPassword($mailer_config['password'])
                 ;
 
-                $mailer = new Swift_Mailer($transport);
+                $Mailer = new Swift_Mailer($Transport);
 
-                $message = new Swift_Message($subject);
-                $message->setFrom(array($mailer_config['from']))
+                $Message = new Swift_Message($subject);
+                $Message->setFrom(array($mailer_config['from']))
                     ->setTo(array($mailer_config['to']))
                     ->setBody($body)
                 ;
 
-                $result = $mailer->send($message);
+                $result = $Mailer->send($Message);
 
                 if ($result) {
                     $ContactForm->addSuccess(null, "Merci de m'avoir contacté. Je reviens vers vous dans les plus brefs délais.");

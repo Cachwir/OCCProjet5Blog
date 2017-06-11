@@ -39,6 +39,7 @@
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
 
+namespace lib;
 
 class Inflector
 {

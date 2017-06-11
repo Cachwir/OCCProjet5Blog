@@ -10,6 +10,9 @@
  *
  * If you have any doubt, you can look at the existing entities and compare it to the entity you wish to create.
  */
+
+namespace lib;
+
 abstract class ORM implements \ArrayAccess {
 
 	public static $tableName = "";

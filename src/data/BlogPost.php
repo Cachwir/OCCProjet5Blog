@@ -1,5 +1,9 @@
 <?php
 
+namespace src\data;
+
+use lib\ORM;
+
 /**
  * Class BlogPost
  */
