@@ -127,7 +127,7 @@ class Form {
         $token = md5(rand());
         $csrf_tokens = Session::get('_csrf_tokens');
 
-        if (!empty($csrf_tokens)) {
+        if (empty($csrf_tokens)) {
             $csrf_tokens = [$token];
         } else {
             $csrf_tokens[] = $token;

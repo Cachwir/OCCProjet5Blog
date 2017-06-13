@@ -28,12 +28,12 @@ class MailHandler {
 
     public function __construct()
     {
-        $Config = Config::getLocaleConfig();
-        $mailer_config =  $Config['mailing']['contact_mail'];
+        $config = Config::getLocaleConfig();
+        $mailer_config =  $config['mailing']['contact_mail'];
 
         foreach ($mailer_config as $type => $value) {
             if (in_array($type, ["from", "to"])) {
-                $value = "default_" . $value;
+                $type = "default_" . $type;
             }
             $this->$type = $value;
         }

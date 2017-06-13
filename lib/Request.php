@@ -32,7 +32,7 @@ class Request {
     }
 
     public static function getParams() {
-        return self::$method;
+        return self::$params;
     }
     public static function setParams($params) {
         self::$params = $params;

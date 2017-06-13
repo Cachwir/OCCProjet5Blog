@@ -18,8 +18,8 @@ class App {
 		Request::init();
 
 		// if debug
-        $Config = Config::get();
-        if ($Config['debug'] && Request::get('debug') == $Config['debug_key']) {
+        $config = Config::get();
+        if ($config['debug'] && Request::get('debug') == $config['debug_key']) {
             Session::set('debug', true);
         }
 	}
