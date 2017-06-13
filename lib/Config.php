@@ -21,6 +21,10 @@ class Config {
 		return self::get()['default_lang'];
 	}
 
+    public static function getLocaleConfig() {
+        return self::get(self::getDefaultLang());
+    }
+
 	public static function getDefaultConfig($lang) {
 		return (isset(self::$config['default']) ? self::$config['default'] : []) + [
 			'debug'                 => false,

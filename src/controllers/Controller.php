@@ -1,14 +1,14 @@
 <?php
 
-namespace src\app;
+namespace src\controllers;
 
-use lib\App;
+use lib\FormFactory;
+use lib\Request;
+use lib\BasicController;
 use src\data\BlogPost;
-use Swift_Mailer;
-use Swift_Message;
-use Swift_SmtpTransport;
+use src\handlers\MailHandler;
 
-class AppController extends App {
+class Controller extends BasicController {
 
 	public static $pages = [
 		'home',
@@ -19,10 +19,10 @@ class AppController extends App {
 
 	public function homeAction() {
 
-		$params = $this->params;
+		$params = $this->getParams();
 		$template_params = [];
 
-        $ContactForm = $this->createForm([], 'login');
+        $ContactForm = FormFactory::createForm([], 'login');
         $ContactForm->add('name', 's', function ($v) {
             if (empty($v)) return "Indiquez votre nom/prénom";
         });
@@ -34,12 +34,11 @@ class AppController extends App {
             if (empty($v)) return "Indiquez votre message";
         });
 
-        if ($this->method == "post") {
-            $ContactForm->bind($this->params);
+        if (Request::getMethod() == "post") {
+            $ContactForm->bind($params);
             if ($ContactForm->isValid()) {
 
-                $Config = $this->getConfig();
-                $mailer_config =  $Config['mailing']['contact_mail'];
+                $MailHandler = MailHandler::getInstance();
 
                 $data = [];
                 $data['Date'] = date("d/m/Y à H:i:s");
@@ -47,28 +46,15 @@ class AppController extends App {
                 $data['Email'] = $params['email'];
                 $data['Message'] = $params['message'];
 
-                $body = "";
+                $message = "";
                 foreach($data as $key => $value){
-                    $body .= $key . " : " . htmlspecialchars($value) . "\r\n";
+                    $message .= $key . " : " . htmlspecialchars($value) . "\r\n";
                 }
 
                 $subject = "Site d'Antoine Bernay : un message à votre attention";
 
-                $Transport = new Swift_SmtpTransport($mailer_config['host'], $mailer_config['port'], $mailer_config['encryption']);
-                $Transport->setUsername($mailer_config['username'])
-                    ->setSourceIp('0.0.0.0')
-                    ->setPassword($mailer_config['password'])
-                ;
 
-                $Mailer = new Swift_Mailer($Transport);
-
-                $Message = new Swift_Message($subject);
-                $Message->setFrom(array($mailer_config['from']))
-                    ->setTo(array($mailer_config['to']))
-                    ->setBody($body)
-                ;
-
-                $result = $Mailer->send($Message);
+                $result = $MailHandler->send($subject, $message);
 
                 if ($result) {
                     $ContactForm->addSuccess(null, "Merci de m'avoir contacté. Je reviens vers vous dans les plus brefs délais.");
@@ -86,7 +72,7 @@ class AppController extends App {
 
     public function blogAction() {
 
-        $params = $this->params;
+        $params = $this->getParams();
         $template_params = [];
 
         $template_params["BlogPosts"] = BlogPost::findFromLast();
@@ -96,10 +82,10 @@ class AppController extends App {
 
     public function blogPostAction() {
 
-        $params = $this->params;
+        $params = $this->getParams();
         $template_params = [];
 
-        $id = $this->paramGet("id");
+        $id = Request::get("id");
         $BlogPost = BlogPost::findById($id);
 
         if (!$BlogPost instanceof BlogPost) {
@@ -113,10 +99,10 @@ class AppController extends App {
 
     public function manageBlogPostAction() {
 
-        $params = $this->params;
+        $params = $this->getParams();
         $template_params = [];
 
-        $id = $this->paramGet("id");
+        $id = Request::get("id");
 
         if ($id !== null) {
             $BlogPost = BlogPost::findById($id);
