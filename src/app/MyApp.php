@@ -7,15 +7,11 @@
 namespace src\app;
 
 use lib\App;
-use src\controllers\Controller;
+use src\controllers\FrontController;
 
 class MyApp extends App {
 
-    public function run()
-    {
-        $this->Controller = Controller::getInstance([$this]);
-        echo $this->Controller->serve();
-    }
+    protected static $controllers = [
+        "default" => FrontController::class,
+    ];
 }
-
-

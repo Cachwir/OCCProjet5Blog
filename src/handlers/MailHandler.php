@@ -60,4 +60,24 @@ class MailHandler {
 
         return $Mailer->send($Message);
     }
+
+    public static function sendContactMail($name, $email, $message)
+    {
+        $MailHandler = self::getInstance();
+
+        $data = [];
+        $data['Date'] = date("d/m/Y à H:i:s");
+        $data['Nom'] = $name;
+        $data['Email'] = $email;
+        $data['Message'] = $message;
+
+        $message = "";
+        foreach($data as $key => $value){
+            $message .= $key . " : " . htmlspecialchars($value) . "\r\n";
+        }
+
+        $subject = "Site d'Antoine Bernay : un message à votre attention";
+
+        return $MailHandler->send($subject, $message);
+    }
 }

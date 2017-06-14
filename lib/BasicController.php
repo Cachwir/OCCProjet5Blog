@@ -57,7 +57,7 @@ class BasicController {
             $Controller = $this; // for accessing $Controller in the header and footer templates
             $this->Twig->addGlobal("Controller", $Controller);
 
-            $content = $this->forward($this->getNextPage($page, Request::isAjax()));
+            $content = $this->callAction($this->getNextPage($page, Request::isAjax()));
         } catch (\Exception $e) {
             if (Config::get()['debug']) {
                 throw $e;
@@ -65,8 +65,8 @@ class BasicController {
                 // exception handling if not in debug mode
                 $code = array_key_exists($e->getCode(), self::$error_pages) ? $e->getCode() : "404"; // if a page exist for this code
 
-                if (in_array($code, static::$error_pages)) { // if a
-                    $content = $this->forward($code);
+                if (in_array($code, static::$error_pages)) { // if a page error has been set, it should be displayed instead of the default message
+                    $content = $this->callAction($code);
                 } else {
                     $content = '<div class="general-error">Une erreur est survenue, veuillez réessayer plus tard.</div>';
                 }
@@ -115,9 +115,6 @@ class BasicController {
     }
 
 	protected function render($template, $params = []) {
-		if (!in_array($template, self::getPages())) {
-		    throw new \Exception("Page introuvable.", 404);
-		}
 
 		// set template variables
 		foreach ($params as $name => $value) {
@@ -134,23 +131,52 @@ class BasicController {
 		exit();
 	}
 
-	public function redirectToPage($action, $params = []) {
+	public function redirectToPage($action, $params = [], $controller = null) {
 		$params['page'] = $action;
 		$target = '?' . http_build_query($params);
-		header('location: ' . $target);
+		$controller_path = $this->App->getControllerPath($controller);
+		$controller_path = $controller_path === null ? "" : ("/" . $controller_path);
+		header('location: ' . $controller_path . $target);
 		exit();
 	}
 
-	protected function forward($action, $method = null, $params = null) {
+    /**
+     * Call an action inside the current controller
+     *
+     * @param $action
+     * @param null $method
+     * @param null $params
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function callAction($action, $method = null, $params = null) {
+        if ($params !== null) Request::setParams($params);
+        if ($method !== null) Request::setMethod($method);
+
+        $method = camelize($action)."Action";
+        if (!method_exists($this, $method)) {
+            throw new \Exception("Action inconnue: $method", 404);
+        }
+
+        return call_user_func([$this, $method], $params);
+    }
+
+    /**
+     * Asks the App to serve the response of a specified action. Useful for discrete redirection and multi-views serving.
+     *
+     * @param   $action
+     * @param   null $method
+     * @param   null $params
+     * @param   string  $controller  The controller's class name
+     * @return  mixed
+     */
+	protected function forward($action, $method = null, $params = null, $controller = null) {
 		if ($params !== null) Request::setParams($params);
 		if ($method !== null) Request::setMethod($method);
 
-		$method = camelize($action)."Action";
-		if (!method_exists($this, $method)) {
-			throw new \Exception("Action inconnue: $method", 404);
-		}
+        $controller = $controller === null ? get_class($this) : $controller;
 
-		return call_user_func([$this, $method], $params);
+        return $this->App->forward($controller, $action);
 	}
 
 	public function getCurrentPage() {
@@ -208,26 +234,19 @@ class BasicController {
      * @param callable  $on_post_success        A callback if the form is validated
      * @return mixed|string
      */
-    public function formStepAction(ORM $Entity, $page, $next, $next_params, $fields, $template_params = [], $form_validator = null, $on_post_success = null) {
+    public function formStepAction(Form $Form, $page, $next, $next_params, $template_params = [], $on_post_success = null) {
 
-        $template_params['Entity'] = $Entity;
-
-        $Form = FormFactory::createForm($Entity);
-        $Form->setAttr('class', $page);
-
-        foreach ($fields as $field) {
-            $Form->add($field[0], $field[1], isset($field[2]) ? $field[2] : null);
-        }
-
-        if (is_callable($form_validator)) {
-            $Form->addValidator($form_validator);
-        }
+        /** @var array|ORM $data */
+        $data = $Form->getData();
+        $template_params['data'] = $Form->getData();
 
         if (Request::getMethod() == 'post') {
             $Form->bind(Request::getParams());
 
             if ($Form->isValid()) {
-                $Entity->save();
+                if ($data instanceof ORM) {
+                    $data->save();
+                }
 
                 if (is_callable($on_post_success)) {
                     $on_post_success($Form, $next_params);

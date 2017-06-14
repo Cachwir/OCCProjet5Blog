@@ -10,6 +10,30 @@ class FormFactory
         return $Form;
     }
 
+    /**
+     * @param ORM|array $target The target array or entity which is going to be fed
+     * @param array     $attributes  The form attributes
+     * @param $fields
+     * @param null $form_validator
+     * @return Form
+     */
+    public static function createGenericForm($target, $fields, $attributes = [], $form_validator = null)
+    {
+        $Form = static::createForm($target);
+
+        foreach ($attributes as $name => $value) {
+            $Form->setAttr($name, $value);
+        }
+        foreach ($fields as $field) {
+            $Form->add($field[0], $field[1], isset($field[2]) ? $field[2] : null);
+        }
+        if (is_callable($form_validator)) {
+            $Form->addValidator($form_validator);
+        }
+
+        return $Form;
+    }
+
     public function setCaptchaKey($form_name, $key) {
         $keys = Session::get('CAPTCHA_KEYS', []);
         $keys[$form_name][] = $key;

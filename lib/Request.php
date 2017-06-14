@@ -30,6 +30,9 @@ class Request {
 	public static function get($field, $default = null) {
 	    return isset(self::$params[$field]) ? self::$params[$field] : $default;
     }
+    public static function set($field, $value) {
+        self::$params[$field] = $value;
+    }
 
     public static function getParams() {
         return self::$params;

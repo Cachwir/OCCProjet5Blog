@@ -46,6 +46,10 @@ class Form {
 		}
 	}
 
+	public function getData() {
+	    return $this->data;
+    }
+
 	public function add($field, $type, $validator = null) {
 		$this->fields[$field] = $type;
 
