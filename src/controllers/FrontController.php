@@ -5,6 +5,7 @@ namespace src\controllers;
 use lib\FormFactory;
 use lib\Request;
 use lib\BasicController;
+use lib\Session;
 use src\data\BlogPost;
 use src\forms\FrontFormFactory;
 use src\handlers\MailHandler;
@@ -93,11 +94,20 @@ class FrontController extends BasicController {
         }
 
         $page = "manageBlogPost";
+        $Form = FrontFormFactory::createBlogPostForm($BlogPost, $page);
 
-        return $this->formStepAction(FrontFormFactory::createBlogPostForm($BlogPost, $page), $page, $page, [], $template_params, function($Form, &$next_params) use ($BlogPost, $mode) {
+        $success = Session::getFlashMessages("success");
+        foreach ($success as $message) {
+            $Form->addSuccess(null, $message);
+        }
+
+        return $this->formStepAction($Form, $page, $page, [], $template_params, function($Form, &$next_params) use ($BlogPost, $mode) {
             if ($mode == "edit") {
                 $BlogPost->set("last_modification_date", time());
                 $BlogPost->save();
+                Session::addFlashMessage("success", "Le post a été modifié avec succès !");
+            } else {
+                Session::addFlashMessage("success", "Le post a été créé avec succès !");
             }
             $next_params["id"] = $BlogPost->get("id");
         });
