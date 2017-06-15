@@ -11,7 +11,7 @@ class Form {
 
 	protected $data;
 	protected $fields = [];
-	protected $fieldValidators = [];
+	protected $field_validators = [];
 	protected $validators = [];
 	protected $messages = ['error' => [], 'warning' => [], 'success' => []];
 	protected $attr = [];
@@ -54,7 +54,7 @@ class Form {
 		$this->fields[$field] = $type;
 
 		if ($validator !== null) {
-			$this->fieldValidators[$field] = $validator;
+			$this->field_validators[$field] = $validator;
 		}
 	}
 
@@ -104,7 +104,7 @@ class Form {
 			$this->set($field, isset($params[$field]) ? cast($params[$field], $type) : null);
 		}
 
-		foreach ($this->fieldValidators as $field => $validator) {
+		foreach ($this->field_validators as $field => $validator) {
 			$error = $validator($this->get($field));
 
 			if (isset($error) && is_string($error)) { // a string, the error is added to the current field
