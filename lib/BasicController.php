@@ -95,7 +95,7 @@ class BasicController {
     }
 
     public function getConfig() {
-	    return Config::get();
+	    return Config::getLocaleConfig();
     }
 
 	public function getPage() {
