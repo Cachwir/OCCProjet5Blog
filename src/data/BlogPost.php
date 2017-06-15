@@ -1,11 +1,15 @@
 <?php
 
+namespace src\data;
+
+use lib\ORM;
+
 /**
  * Class BlogPost
  */
 class BlogPost extends ORM {
 
-	public static $tableName = "blog_posts";
+	public static $table_name = "blog_posts";
 	public static $fields = [
 		'id'                        => 'i',
         'author'                    => 's',
@@ -16,7 +20,11 @@ class BlogPost extends ORM {
         'content'                   => 's',
 	];
 
-	public static $computedFields = [];
+    public static $table_primary_key = "id";
+
+    public static $table_objects = [];
+
+	public static $computed_fields = [];
 
 	public static function findFromLast()
     {

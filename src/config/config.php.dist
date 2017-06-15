@@ -1,5 +1,7 @@
 <?php
 
+use lib\Config;
+
 Config::set([
 	'debug'                  => true,
 	'debug_key'              => 'cachwir',

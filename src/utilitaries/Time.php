@@ -1,5 +1,9 @@
 <?php
 
+namespace src\utilitaries;
+
+use lib\App;
+
 /**
  * Class Time
  *

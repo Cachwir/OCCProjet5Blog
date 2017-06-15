@@ -5,11 +5,13 @@
  * Time: 2:46 PM
  */
 
+namespace lib;
+
 class Form {
 
 	protected $data;
 	protected $fields = [];
-	protected $fieldValidators = [];
+	protected $field_validators = [];
 	protected $validators = [];
 	protected $messages = ['error' => [], 'warning' => [], 'success' => []];
 	protected $attr = [];
@@ -44,11 +46,15 @@ class Form {
 		}
 	}
 
+	public function getData() {
+	    return $this->data;
+    }
+
 	public function add($field, $type, $validator = null) {
 		$this->fields[$field] = $type;
 
 		if ($validator !== null) {
-			$this->fieldValidators[$field] = $validator;
+			$this->field_validators[$field] = $validator;
 		}
 	}
 
@@ -98,7 +104,7 @@ class Form {
 			$this->set($field, isset($params[$field]) ? cast($params[$field], $type) : null);
 		}
 
-		foreach ($this->fieldValidators as $field => $validator) {
+		foreach ($this->field_validators as $field => $validator) {
 			$error = $validator($this->get($field));
 
 			if (isset($error) && is_string($error)) { // a string, the error is added to the current field
@@ -120,36 +126,38 @@ class Form {
 
 	}
 
-	public function generateCsrfToken() {
-		$config = Config::get();
-		$ns = $config['session_namespace'];
-		$token = md5(rand());
+    public function generateCsrfToken() {
+        $config = Config::get();
+        $token = md5(rand());
+        $csrf_tokens = Session::get('_csrf_tokens');
 
-		if (!isset($_SESSION[$ns]['_csrf_tokens'])) {
-			$_SESSION[$ns]['_csrf_tokens'] = [$token];
-		} else {
-			$_SESSION[$ns]['_csrf_tokens'][] = $token;
-		}
+        if (empty($csrf_tokens)) {
+            $csrf_tokens = [$token];
+        } else {
+            $csrf_tokens[] = $token;
+        }
 
-		if (count($_SESSION[$ns]['_csrf_tokens']) > $config['csrf_token_validity']) {
-			array_shift($_SESSION[$ns]['_csrf_tokens']);
-		}
+        if (count($csrf_tokens) > $config['csrf_token_validity']) {
+            array_shift($csrf_tokens);
+        }
 
-		return $token;
-	}
+        Session::set('_csrf_tokens', $csrf_tokens);
 
-	public function getCsrfTokens() {
-		$ns = Config::get()['session_namespace'];
-		return isset($_SESSION[$ns]['_csrf_tokens']) && is_array($_SESSION[$ns]['_csrf_tokens']) ? $_SESSION[$ns]['_csrf_tokens'] : [];
-	}
+        return $token;
+    }
 
-	public function isCsrfTokenValid($token) {
-		return in_array($token, $this->getCsrfTokens());
-	}
+    public function getCsrfTokens() {
+        $csrf_tokens =  Session::get('_csrf_tokens');
+        return is_array($csrf_tokens) ? $csrf_tokens : [];
+    }
 
-	public function printCsrfToken() {
-		echo '<input type="hidden" name="_csrf_token" value="'.$this->generateCsrfToken().'">';
-	}
+    public function isCsrfTokenValid($token) {
+        return in_array($token, $this->getCsrfTokens());
+    }
+
+    public function printCsrfToken() {
+        echo '<input type="hidden" name="_csrf_token" value="'.$this->generateCsrfToken().'">';
+    }
 
 	public function printMessages() {
 		foreach ($this->messages as $type => $messages) {
@@ -158,37 +166,6 @@ class Form {
 			}
 		}
 	}
-
-    /**
-     * Returns a XSS protected message bound in the $element
-     * @param string        $type             error, warning or success
-     * @param string|null   $target           the target. If null, will get all the untargeted messages and add a <br> between them
-     * @param string        $element          The html element in which the message should be put. Use %message% to specify the message. Ex : "<span>%message%</span>"
-     * @return mixed|string
-     */
-	public function printMessageIfExists($target = null, $type = "error", $element = "%message%")
-    {
-        $message = "";
-
-	    if ($target !== null && isset($this->messages[$type][$target])) {
-            $message = $this->messages[$type][$target];
-        } elseif ($target === null && !empty($this->messages[$type])) {
-            for ($i = 0, $c = count($this->messages[$type]); $i < $c; $i++) {
-                if (isset($this->messages[$type][$i])) {
-                    if ($message !== "") {
-                        $message .= "<br>";
-                    }
-                    $message .= htmlspecialchars($this->messages[$type][$i]);
-                }
-            }
-        }
-
-        if ($message !== "") {
-            $message = str_replace("%message%", $message, $element);
-        }
-
-        return $message;
-    }
 
     public function hasMessages() {
         return count($this->messages['error']) > 0 || count($this->messages['warning']) > 0 || count($this->messages['success']) > 0;

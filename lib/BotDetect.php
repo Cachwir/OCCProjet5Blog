@@ -5,6 +5,9 @@
  * Date: 30/03/15
  * Time: 11:15
  */
+
+namespace lib;
+
 class BotDetector {
 
 	protected static $bots = [

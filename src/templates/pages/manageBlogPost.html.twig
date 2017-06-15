@@ -56,9 +56,15 @@
 
     <script>
         $(function() {
+            var hasSubmittedContactForm = {{ Form.hasMessages() ? "true" : "false" }};
             $(document).ready(function(e) {
-                handle_pop_below($('.manageBlogPost'));
+                handle_pop_below($('form.manageBlogPost'));
+                if (hasSubmittedContactForm) {
+                    var $scrollZone = $("body"),
+                        $scrollTo = $('#footer');
+                    $scrollZone.animate( { scrollTop: $scrollZone[0].scrollHeight - $scrollTo[0].scrollHeight }, 750 );
+                }
             });
-        })
+        });
     </script>
 </div>
