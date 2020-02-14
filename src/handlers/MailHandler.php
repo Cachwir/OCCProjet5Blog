@@ -41,24 +41,30 @@ class MailHandler {
 
     public function send($subject, $message, $from = null, $to = null)
     {
-        $from = $from === null ? array($this->default_from) : $from;
-        $to = $to === null ? array($this->default_to) : $to;
+        if (Config::getLocaleConfig()['mailing']['perform_shoot'])
+        {
+            $from = $from === null ? array($this->default_from) : $from;
+            $to = $to === null ? array($this->default_to) : $to;
 
-        $Transport = new Swift_SmtpTransport($this->host, $this->port, $this->encryption);
-        $Transport->setUsername($this->username)
-            ->setSourceIp('0.0.0.0')
-            ->setPassword($this->password)
-        ;
+            $Transport = new Swift_SmtpTransport($this->host, $this->port, $this->encryption);
+            $Transport->setUsername($this->username)
+                ->setSourceIp('0.0.0.0')
+                ->setPassword($this->password)
+            ;
 
-        $Mailer = new Swift_Mailer($Transport);
+            $Mailer = new Swift_Mailer($Transport);
 
-        $Message = new Swift_Message($subject);
-        $Message->setFrom($from)
-            ->setTo($to)
-            ->setBody($message)
-        ;
+            $Message = new Swift_Message($subject);
+            $Message->setFrom($from)
+                ->setTo($to)
+                ->setBody($message)
+            ;
 
-        return $Mailer->send($Message);
+            return $Mailer->send($Message);
+        }
+        else {
+            return true;
+        }
     }
 
     public static function sendContactMail($name, $email, $message)

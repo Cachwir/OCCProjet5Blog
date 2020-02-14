@@ -23,7 +23,7 @@ Config::set([
 	'site_title' => 'Mon super blog',
 	'mailing'               => [
 		'perform_shoot' => false,
-		'confirmation_callback'  => [
+		'contact_mail'  => [
 			"host" => "",
 			"port" => 587,
 			"encryption" => "",
